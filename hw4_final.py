@@ -158,6 +158,7 @@ def train_and_evaluate(batch_size, activation_name, X_train, y_train, X_val, y_v
             with torch.no_grad():
                 train_preds = torch.argmax(model(X_train), dim=1)
                 train_f1 = f1_score(y_train, train_preds, average='macro')
+                # train_f1 = f1_score(y_train.cpu().numpy(), train_preds.cpu().numpy(), average='macro')
                 history_f1.append(train_f1)
             model.train()
 
@@ -166,6 +167,7 @@ def train_and_evaluate(batch_size, activation_name, X_train, y_train, X_val, y_v
         val_outputs = model(X_val)
         val_preds = torch.argmax(val_outputs, dim=1)
         fitness = f1_score(y_val, val_preds, average='macro')
+        # fitness = f1_score(y_val.cpu().numpy(), val_preds.cpu().numpy(), average='macro')
         
     if verbose:
         return fitness, history_f1, model
@@ -333,6 +335,7 @@ if __name__ == "__main__":
     with torch.no_grad():
         test_preds = torch.argmax(ga_model(X_test), dim=1)
         ga_test_f1 = f1_score(y_test, test_preds, average='macro')
+        # ga_test_f1 = f1_score(y_test.cpu().numpy(), test_preds.cpu().numpy(), average='macro')
     
     plt.figure(figsize=(10, 4))
     plt.plot(range(1, FINAL_EPOCHS + 1), ga_train_hist, marker='o', label='Training F1')
